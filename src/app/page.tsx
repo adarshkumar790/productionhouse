@@ -1,4 +1,5 @@
 "use client";
+import LatestReleased from '@/components/LatestReleased';
 import Navbar from '@/components/Navbar';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -161,7 +162,7 @@ const Home = () => {
   </div>
 </div>
 
-
+      <LatestReleased/>
       </div>
     </>
   );
