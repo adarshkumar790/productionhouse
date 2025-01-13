@@ -161,7 +161,6 @@ const Home = () => {
     ))}
   </div>
 </div>
-
       <LatestReleased/>
       </div>
     </>
