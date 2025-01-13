@@ -83,7 +83,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="min-h-screen text-white bg-gray-700">
+      <div className="min-h-screen text-white bg-black">
         <Navbar />
         {/* <Head>
           <title>Pushpa 2: The Rule</title>
@@ -161,8 +161,12 @@ const Home = () => {
     ))}
   </div>
 </div>
+      
+      </div>
+      <div className='mb-8'>
       <LatestReleased/>
       </div>
+      
     </>
   );
 };

@@ -10,12 +10,16 @@ const movies = [
     rating: "U/A 13+",
     language: "Hindi",
     genre: "Action",
+    singer: "Udit Narayan",
+    poster: "/pushpa.jpeg",
+    director: "Udit Narayan",
     description:
       "The thrilling sequel to Pushpa that takes you deeper into the intense world of crime, passion, and ambition.",
   },
   {
     title: "Deva",
     video: "/deva.mp4",
+    poster: "/deva.jpeg",
     year: "2023",
     rating: "U/A 13+",
     language: "Tamil",
@@ -25,6 +29,7 @@ const movies = [
   {
     title: "Baghi4",
     video: "/baghi4.mp4",
+    poster: "/baghi4.jpeg",
     year: "2023",
     rating: "U/A 16+",
     language: "Hindi",
@@ -35,6 +40,7 @@ const movies = [
   {
     title: "Shafira",
     video: "/safira.mp4",
+    poster: "/shafira.jpeg",
     year: "2022",
     rating: "U/A 7+",
     language: "Hindi",
@@ -44,6 +50,7 @@ const movies = [
   {
     title: "Azaad",
     video: "/Azzad.mp4",
+    poster: "/azad.jpeg",
     year: "2024",
     rating: "U/A 13+",
     language: "Hindi",
@@ -54,6 +61,7 @@ const movies = [
   {
     title: "Satya",
     video: "/satya.mp4",
+    poster: "/satya.jpeg",
     year: "2023",
     rating: "U/A 13+",
     language: "Telugu",
@@ -89,7 +97,7 @@ const LatestReleased = () => {
                 className="relative w-60 cursor-pointer"
                 onMouseEnter={() => {
                   setHoveredIndex(index);
-                  setVideoPlayDuration(0); // Reset the video play duration
+                  setVideoPlayDuration(0); 
                   const videoElement = document.getElementById(
                     `movie-video-${index}`
                   ) as HTMLVideoElement;
@@ -114,19 +122,19 @@ const LatestReleased = () => {
                 }}
               >
                 {/* Video Thumbnail */}
-                <div className="rounded-lg  flex items-center justify-center">
-                  <video
-                    id={`watch-${index}`}
-                    src={movie.video}
-                    className={`rounded-lg w-60 h-80 object-cover ${
-                      hoveredIndex === index
-                        ? "scale-10 transition-transform duration-300"
-                        : "scale-10"
-                    }`}
-                    loop={false}
-                    muted
-                  />
-                </div>
+                <div className="rounded-lg flex items-center justify-center">
+  <video
+    id={`watch-${index}`}
+    src={movie.video}
+    className={`rounded-lg w-60 h-80 object-cover ${
+      hoveredIndex === index ? "scale-300 transition-transform duration-300" : "scale-300"
+    }`}
+    loop={false}
+    muted
+    poster={movie.poster}  // Use the poster image for the thumbnail
+  />
+</div>
+
 
                 {/* Details Popup on Hover */}
                 {hoveredIndex === index && (
@@ -137,7 +145,7 @@ const LatestReleased = () => {
                         : isLast
                         ? "right-0"
                         : "left-1/2 transform -translate-x-1/2"
-                    } w-64 h-72 bg-gray-900 rounded-lg p-4 flex flex-col z-10`}
+                    } w-64 h-80 bg-gray-900 rounded-lg p-4 flex flex-col z-10`}
                   >
                     {/* Video */}
                     <div className="rounded-lg mb-2">
@@ -152,15 +160,16 @@ const LatestReleased = () => {
                     {/* Watch Button */}
                     <div className="mb-2">
                       <button
-                        className="bg-white text-black px-4 py-1 rounded-md text-sm w-full"
+                        className="bg-blue-600 text-black px-4 py-1 rounded-md text-sm w-full font-bold "
                         onClick={() => handleWatchNow(movie.video)}
                       >
-                        Watch Now
+                        Watch Full Video
                       </button>
                     </div>
                     {/* Date and Language */}
-                    <div className="flex justify-between text-sm text-gray-400 mb-2">
+                    <div className="flex justify-between text-sm text-gray-400 mb-2 font-bold">
                       <span>{movie.year}</span>
+                      <span>{movie.title}</span>
                       <span>{movie.language}</span>
                     </div>
                     {/* Description */}
@@ -168,6 +177,11 @@ const LatestReleased = () => {
                       <p className="text-xs text-gray-300">
                         {movie.description}
                       </p>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-400 mb-2 mt-4">
+                      <span>singer: {movie.singer}</span>
+                      <span>Director: {movie.director}</span>
+
                     </div>
                   </div>
                 )}
