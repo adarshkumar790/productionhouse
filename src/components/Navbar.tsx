@@ -36,19 +36,19 @@ function Navbar() {
                 className="block px-4 py-2 hover:bg-red-900 hover:rounded text-red-600 w-full text-left"
                 onClick={() => handleLanguageChange('en')}
               >
-                en
+                English
               </button>
               <button
                 className="block px-4 py-2 hover:bg-red-900 hover:rounded text-blue-900 text-red-600 w-full text-left"
                 onClick={() => handleLanguageChange('hn')}
               >
-                hn
+                Hindi
               </button>
               <button
                 className="block px-4 py-2 hover:bg-red-900 hover:rounded text-blue-900 text-red-600 w-full text-left"
                 onClick={() => handleLanguageChange('guj')}
               >
-                gj
+               Gujrat
               </button>
             </div>
           )}
