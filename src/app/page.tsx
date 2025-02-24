@@ -1,97 +1,48 @@
 "use client";
-import LatestReleased from '@/components/LatestReleased';
-import Navbar from '@/components/Navbar';
-import Head from 'next/head';
-import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
-
-
+import Navbar from "@/components/Navbar";
+import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
+import { useFetchMovies, Video } from "@/helper/Helper";
+import ContinueWatching from "@/components/ContinueWatching";
+import Trailer from "@/components/Trailer";
+import LatestReleased from "@/components/LatestReleased";
+import TopFilmPicks from "@/components/TopFilm";
+import Top10India from "@/components/Top10";
+import PopularMovie from "@/components/PopularMovie";
+import PopularWebsereries from "@/components/PopularWebseries";
+import PopularMusic from "@/components/PopularMusic";
+import ComingSoon from "@/components/ComingSoon";
 
 const Home = () => {
+  const { videos, loading, error } = useFetchMovies();
   const [isMuted, setIsMuted] = useState(true);
-  const [currentVideo, setCurrentVideo] = useState({
-    title: 'Safira',
-    duration: '2h 40m',
-    src: '/safira.mp4',
-    description: "Safira's journey is a tale of love, betrayal, and redemption as she navigates a world full of secrets and lies.",
-
-  });
-
-
+  const [currentVideo, setCurrentVideo] = useState<Video | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const videos = [
-    {
-      title: 'Safira',
-      duration: '2h 40m',
-      src: '/safira.mp4',
-      description: "Safira's journey is a tale of love, betrayal, and redemption as she navigates a world full of secrets and lies.",
-    },
-    {
-      title: 'Satya',
-      duration: '1h 50m',
-      src: '/satya.mp4',
-      description: "Satya's story is a gripping drama of friendship and honor as he stands up against corruption and injustice.",
-    },
-    {
-      title: 'Lahore',
-      duration: '2h 10m',
-      src: '/lahore.mp4',
-      description: "Lahore chronicles the sacrifices of a soldier torn between duty and family during tumultuous times.",
-    },
-    {
-      title: 'PM',
-      duration: '2h 30m',
-      src: '/pm.mp4',
-      description: "PM dives deep into the life of a visionary leader battling conspiracies and striving to change the nation's future.",
-    },
-  ];
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-  };
-
-
-  type Video = {
-    title: string;
-    duration: string;
-    src: string;
-    description: string;
-  };
-  
-  const changeBackgroundVideo = (video: Video) => {
-    setCurrentVideo(video);
-  };
-  
-  
+  useEffect(() => {
+    if (videos.length > 0) setCurrentVideo(videos[0]);
+  }, [videos]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.hidden && videoRef.current) {
-        videoRef.current.pause();
-      } else if (videoRef.current) {
-        videoRef.current.play();
-      }
+      if (document.hidden && videoRef.current) videoRef.current.pause();
+      else videoRef.current?.play();
     };
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
+
+  if (loading) return <div className="text-white text-center">Loading...</div>;
+  if (error) return <div className="text-red-500 text-center">Error: {error}</div>;
 
   return (
     <>
-      <div className="min-h-screen text-white bg-black">
-        <Navbar />
-        {/* <Head>
-          <title>Pushpa 2: The Rule</title>
-        </Head> */}
+    <div className="relative min-h-screen text-white bg-black">
+      <Navbar />
 
-        {/* Hero Section */}
-        <div className="relative h-[500px]">
-          {/* Background Video */}
+      {currentVideo && (
+        <div className="relative w-full md:h-[540px] h-[400px] flex items-center justify-center">
           <video
             ref={videoRef}
             className="absolute inset-0 w-full h-full object-cover"
@@ -99,76 +50,74 @@ const Home = () => {
             autoPlay
             loop
             muted={isMuted}
-          ></video>
+          />
+            <div className="absolute inset-0">
+            <div className="hidden md:block absolute inset-0 bg-gradient-to-l from-black/40 via-transparent to-black/80"></div>
+            <div className="hidden md:block absolute inset-0 bg-gradient-to-tr from-black/80 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 md:hidden bg-gradient-to-b from-black/80 via-transparent to-black/90"></div>
+            <div className="absolute inset-0 md:hidden bg-gradient-to-b from-black/80 via-transparent to-black/80"></div>
+            <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+          </div>
 
-          {/* Overlay with gradient red shadow on the right */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-red-800/20"></div>
-
-          {/* Mute/Unmute Button */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60"></div>
+          </div>
           <button
-            onClick={toggleMute}
-            className="absolute bottom-4 right-4 z-20 bg-gray-700 p-2 rounded-full focus:outline-none hover:bg-gray-600"
+            onClick={() => setIsMuted(!isMuted)}
+            className="absolute md:bottom-2   right-6 z-20 bg-gray-800 p-2 rounded-full focus:outline-none hover:bg-gray-700"
           >
-            {isMuted ? '🔇' : '🔊'}
+            {isMuted ? "🔇" : "🔊"}
           </button>
+          <div className="absolute bottom-0 z-10 w-full md:w-[550px] max-w-full md:pl-8 mx-auto md:mx-0 text-center md:text-left left-1/2 md:left-8 transform -translate-x-1/2 md:translate-x-0">
 
-          {/* Content */}
-          {/* Content */}
-<div className="relative z-10 h-full flex flex-col justify-center items-center px-6 text-center">
-  <div className="bg-black/50 p-6 rounded-lg max-w-3xl mt-64 mb-2">
-    {/* Title */}
-    {/* <h1 className="text-2xl font-bold text-yellow-500">{currentVideo.title}</h1> */}
+            <span className="font-bold text-center md:text-6xl text-xl text-yellow-500">Sarfira</span>
+            <p className="text-gray-100 md:text-xl text-xs md:mt-2">Sarfira (transl. Crazy) is a 2024 Indian Hindi-language drama film directed by Sudha Kongara and produced by 2D Entertainment.</p>
+            <div className="flex justify-center md:mt-2 md:justify-between items-center text-lg text-gray-300 font-medium md:space-x-0 space-x-4">
+              <span className="text-yellow-500 md:text-xl text-xs">Newly added • 2024</span>
+              <span className="font-bold text-yellow-500 md:text-sm text-xs">2.4h</span>
+              
+            </div>
+            <p className="text-[#FDFAFA] md:text-xl text-xs md:mt-2">• Hindi  • English  • Gujrati</p>
+            <button className="flex items-center justify-center bg-gradient-to-r from-[#FFE203] to-[#F50D11] 
+             rounded font-bold md:mt-4 mt-2 px-8 py-3 text-gray-900 text-sm md:text-xl mx-auto md:mx-0">
+             <Image src="/plays.png" width={24} height={24} alt="play" className="mr-2"/>
+              Watch Now
+             </button>
 
-    {/* Release Date and Duration */}
-    <div className="flex justify-between items-center w-full mt-2 mb-2 text-sm text-gray-300 font-medium">
-      <div className="text-left font-bold text-yellow-500">Newly added • 2024</div>
-      <div className="text-right font-bold text-yellow-500">{currentVideo.duration}</div>
-    </div>
-
-    {/* Description Text */}
-    <p className="text-gray-100">
-      {currentVideo.description}
-    </p>
-
-    {/* Watch Button */}
-    <div className='ml-56'>
-      <button className="flex items-center bg-white rounded font-bold mb-16 mt-4 p-2 pl-16 pr-16 text-gray-900 text-xl">
-        <Image src="/play.png" width={20} height={20} alt="play" className="mr-2" /> 
-        Watch Now
-      </button>
-    </div>
-  </div>
-</div>
-
+          </div>
+          <div className="absolute right-2 bottom-0 w-full md:w-[480px] max-h-[500px] flex flex-row md:flex-row overflow-x-auto md:overflow-y-auto p-4 rounded-lg shadow-lg">
+            {videos.map((video) => (
+              <div
+                key={video.id}
+                className="w-36 h-60 relative cursor-pointer hidden md:block first:ml-0 ml-4"
+                onClick={() => setCurrentVideo(video)}
+              >
+                <Image
+                  src={video.thumbnail}
+                  alt={video.title}
+                  width={192} 
+                  height={240} 
+                  className="w-40 h-60 object-cover rounded-lg transition-transform transform hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
         </div>
-
-        {/* Carousel Section */}
-        <div className="px-4 py-4">
-  <div className="flex space-x-1 overflow-x-none -mt-14 justify-center ">
-    {videos.map((video, index) => (
-      <div
-        key={index}
-        className="flex-shrink-0 w-24 aspect-w-16 aspect-h-4 relative cursor-pointer z-20 "
-        onClick={() => changeBackgroundVideo(video)}
-      >
-        <video
-          className="w-full h-full object-cover rounded-xl" 
-          src={video.src}
-          loop
-          muted
-        ></video>
-      </div>
-    ))}
-  </div>
-</div>
-      
-      </div>
-      <div className='mb-8'>
+      )} 
+      <ContinueWatching/>
+      <Trailer/>
       <LatestReleased/>
-      </div>
-      
+      <TopFilmPicks/>
+      <Top10India/>
+      <PopularMovie/>
+      <PopularWebsereries/>
+      <PopularMusic/>
+      <ComingSoon/>
+    </div>
+    
     </>
   );
 };
+
 
 export default Home;
